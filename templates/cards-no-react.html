@@ -21,6 +21,8 @@
       .then((data) => insertCardData(data));
   }
 
+  ///////////////////////////////////////////
+
   const createCardAndAddToContainer = (name, skill, imgUrl) => {
     const cardElement = document.createElement("div");
     cardElement.classList.add("card");
@@ -54,6 +56,9 @@
     }
   };
 
+
+  ///////////////////////////////////////////
+  
   const addNewCard = (evt) => {
     // Respond to the Add New Card form getting submitted.
     // This is an event handling function.
