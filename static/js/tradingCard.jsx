@@ -53,6 +53,7 @@
 function AddTradingCard(props) {
   // use useState hook to set value of the name, create a function to update the name
   // use useState hook to set value of the skill, create a function to update the skill
+  //string is empty because thats what we are setting name to
   const [name, setName] = React.useState("");
   const [skill, setSkill] = React.useState("");
 
@@ -66,8 +67,10 @@ function AddTradingCard(props) {
     })
       .then((response) => response.json())
       .then((jsonResponse) => {
-        //alert(`Card added! Response: ${jsonResponse}`);
-        TradingCardContainer(jsonResponse)
+         // this could also be written as const cardAdded = { jsonResponse } using
+        // Javascript destructuring
+        const cardAdded = jsonResponse.cardAdded;
+        props.addCard(cardAdded);
       });
   }
   return (
@@ -120,6 +123,13 @@ function TradingCardContainer() {
    //  [cards,  function to update cards]
   const [cards, setCards] = React.useState([]);
 
+  function addCard(newCard) {
+    // [...cards] makes a copy of cards. Similar to currentCards = cards[:] in Python
+    const currentCards = [...cards];
+    // [...currentCards, newCard] is an array containing all elements in currentCards followed by newCard
+    setCards([...currentCards, newCard]);
+  }
+
   React.useEffect(() =>{
     fetch('/cards.json')
     .then((response) => response.json())
@@ -144,7 +154,7 @@ function TradingCardContainer() {
   // returning the cards inside a div in the HTML
   return (
     <React.Fragment>
-      <AddTradingCard />
+      <AddTradingCard addCard={addCard} />
       <h2>Trading Cards</h2>
       <div className="grid">{tradingCards}</div>
     </React.Fragment>
