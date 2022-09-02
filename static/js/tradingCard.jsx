@@ -49,9 +49,59 @@
   },
 ]; */
 
+
+function AddTradingCard(props) {
+  // use useState hook to set value of the name, create a function to update the name
+  // use useState hook to set value of the skill, create a function to update the skill
+  const [name, setName] = React.useState("");
+  const [skill, setSkill] = React.useState("");
+
+  function addNewCard() {
+    fetch("/add-card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({"name": name, "skill": skill})
+    })
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        //alert(`Card added! Response: ${jsonResponse}`);
+        TradingCardContainer(jsonResponse)
+      });
+  }
+  return (
+    <React.Fragment>
+      <h2>Add New Trading Card</h2>
+      <label htmlFor="nameInput">Name</label>
+      <input
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        id="nameInput"
+        style={{ marginLeft: "5px" }}
+      ></input>
+      <label
+        htmlFor="skillInput"
+        style={{ marginLeft: "10px", marginRight: "5px" }}
+      >
+        Skill
+      </label>
+      <input
+        value={skill}
+        onChange={(event) => setSkill(event.target.value)}
+        id="skillInput"
+      ></input>
+      <button style={{ marginLeft: "10px" }} onClick={addNewCard}>
+        Add
+      </button>
+    </React.Fragment>
+  );
+}
+
+
 // Return a div tag which has a className:"card", and contains two <p>tags and <img>tag
 // We create a card modle for each of the cards
-
+// TradingCard expecting props
 function TradingCard(props) {
   return (
     <div className="card">
@@ -67,7 +117,7 @@ function TradingCard(props) {
 // We fetch data the app route '/card.json' and we use it to set cards
 
 function TradingCardContainer() {
-
+   //  [cards,  function to update cards]
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() =>{
@@ -91,8 +141,13 @@ function TradingCardContainer() {
     );
   }
 
-  return ( // returning the cards inside a div in the HTML
-    <div className="grid">{tradingCards}</div>
+  // returning the cards inside a div in the HTML
+  return (
+    <React.Fragment>
+      <AddTradingCard />
+      <h2>Trading Cards</h2>
+      <div className="grid">{tradingCards}</div>
+    </React.Fragment>
   );
 }
 
